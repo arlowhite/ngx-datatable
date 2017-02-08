@@ -9,7 +9,7 @@ import {
   forceFillColumnWidths, adjustColumnWidths, sortRows, scrollbarWidth,
   setColumnDefaults, throttleable, translateTemplates
 } from '../utils';
-import { ColumnMode, SortType, SelectionType } from '../types';
+import { ColumnMode, SortType, SelectionType, TableColumn } from '../types';
 import { DataTableBodyComponent } from './body';
 import { DataTableColumnDirective } from './columns';
 import { DatatableRowDetailDirective } from './row-detail';
@@ -122,7 +122,7 @@ export class DatatableComponent implements OnInit, AfterViewInit, DoCheck {
    *
    * @memberOf DatatableComponent
    */
-  @Input() set columns(val: any[]) {
+  @Input() set columns(val: TableColumn[]) {
     if(val) {
       setColumnDefaults(val);
       this.recalculateColumns(val);
@@ -138,7 +138,7 @@ export class DatatableComponent implements OnInit, AfterViewInit, DoCheck {
    * @type {any[]}
    * @memberOf DatatableComponent
    */
-  get columns(): any[] {
+  get columns(): TableColumn[] {
     return this._columns;
   }
 
@@ -651,7 +651,7 @@ export class DatatableComponent implements OnInit, AfterViewInit, DoCheck {
   _count: number = 0;
 
   _rows: any[];
-  _columns: any[];
+  _columns: TableColumn[];
   _columnTemplates: QueryList<DataTableColumnDirective>;
 
   constructor(element: ElementRef, differs: KeyValueDiffers) {
