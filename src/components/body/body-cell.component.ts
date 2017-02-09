@@ -1,6 +1,6 @@
 import {
   Component, Input, PipeTransform, HostBinding, 
-  Output, EventEmitter, HostListener, ElementRef
+  Output, EventEmitter, HostListener, ElementRef, ChangeDetectionStrategy
 } from '@angular/core';
 
 import { getterForProp, Keys, ValueGetter, emptyStringGetter } from '../../utils';
@@ -32,7 +32,8 @@ import { SortDirection } from '../../types';
   `,
   host: {
     class: 'datatable-body-cell'
-  }
+  },
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DataTableBodyCellComponent {
 

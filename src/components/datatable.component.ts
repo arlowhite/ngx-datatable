@@ -2,7 +2,7 @@ import {
   Component, Input, Output, ElementRef, EventEmitter, ViewChild,
   HostListener, ContentChildren, OnInit, QueryList, AfterViewInit,
   HostBinding, ContentChild, TemplateRef, IterableDiffer,
-  DoCheck, KeyValueDiffers, KeyValueDiffer, ViewEncapsulation
+  DoCheck, KeyValueDiffers, KeyValueDiffer, ViewEncapsulation, ChangeDetectionStrategy
 } from '@angular/core';
 
 import {
@@ -87,7 +87,8 @@ import { DatatableRowDetailDirective } from './row-detail';
   styleUrls: ['./datatable.component.scss'],
   host: {
     class: 'ngx-datatable'
-  }
+  },
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DatatableComponent implements OnInit, AfterViewInit, DoCheck {
 
@@ -366,12 +367,12 @@ export class DatatableComponent implements OnInit, AfterViewInit, DoCheck {
   @Input() rowIdentity: (x: any) => any = ((x: any) => x);
 
   /**
-   * Row specific classes. 
+   * Row specific classes.
    * Similar implementation to ngClass.
-   * 
+   *
    *  [rowClass]="'first second'"
    *  [rowClass]="{ 'first': true, 'second': true, 'third': false }"
-   * 
+   *
    * @type {*}
    * @memberOf DatatableComponent
    */
