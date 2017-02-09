@@ -1,5 +1,5 @@
 import {
-  Component, Output, EventEmitter, Input, HostBinding, ViewChild, OnInit, OnDestroy
+  Component, Output, EventEmitter, Input, HostBinding, ViewChild, OnInit, OnDestroy, ChangeDetectionStrategy
 } from '@angular/core';
 import { translateXY, columnsByPin, columnGroupWidths, RowHeightCache } from '../../utils';
 import { SelectionType } from '../../types';
@@ -57,7 +57,8 @@ import { ScrollerComponent } from './scroller.component';
   `,
   host: {
     class: 'datatable-body'
-  }
+  },
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DataTableBodyComponent implements OnInit, OnDestroy {
 

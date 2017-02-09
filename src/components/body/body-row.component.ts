@@ -1,5 +1,5 @@
 import {
-  Component, Input, HostBinding, ElementRef, Output, EventEmitter, HostListener
+  Component, Input, HostBinding, ElementRef, Output, EventEmitter, HostListener, ChangeDetectionStrategy
 } from '@angular/core';
 
 import {
@@ -27,7 +27,8 @@ import {
   `,
   host: {
     class: 'datatable-body-row'
-  }
+  },
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DataTableBodyRowComponent {
 
