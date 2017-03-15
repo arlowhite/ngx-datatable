@@ -9,7 +9,7 @@ import * as import0 from '@angular/core';
 import * as import1 from '@angular/common';
 import * as import2 from '../../../../build/components/header/header-cell.component';
 const styles_DataTableHeaderCellComponent:any[] = ([] as any[]);
-export const RenderType_DataTableHeaderCellComponent:import0.RendererTypeV2 = import0.ɵcrt({
+export const RenderType_DataTableHeaderCellComponent:import0.RendererType2 = import0.ɵcrt({
   encapsulation: 2,
   styles: styles_DataTableHeaderCellComponent,
   data: {}
@@ -127,7 +127,7 @@ function View_DataTableHeaderCellComponent_3():import0.ɵViewDefinition {
   },(null as any));
 }
 export function View_DataTableHeaderCellComponent_0():import0.ɵViewDefinition {
-  return import0.ɵvid(0,[
+  return import0.ɵvid(2,[
     import0.ɵted((null as any),['\n    ']),
     import0.ɵeld(0,(null as any),(null as any),13,'div',([] as any[]),(null as any),(null as any),(null as any),(null as any),(null as any)),
     import0.ɵted((null as any),['\n      ']),
@@ -200,7 +200,7 @@ export function View_DataTableHeaderCellComponent_0():import0.ɵViewDefinition {
     check(view,12,0,currVal_0);
   });
 }
-const RenderType_DataTableHeaderCellComponent_Host:import0.RendererTypeV2 = import0.ɵcrt({
+const RenderType_DataTableHeaderCellComponent_Host:import0.RendererType2 = import0.ɵcrt({
   encapsulation: 2,
   styles: ([] as any[]),
   data: {}

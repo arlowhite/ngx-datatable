@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var types_1 = require("../types");
-var deep_getter_1 = require("./deep-getter");
+var column_prop_getters_1 = require("./column-prop-getters");
 /**
  * Gets the next sort direction
  * @param  {SortType}      sortType
@@ -86,8 +86,8 @@ function sortRows(rows, columns, dirs) {
     return temp.sort(function (a, b) {
         for (var _i = 0, dirs_1 = dirs; _i < dirs_1.length; _i++) {
             var _a = dirs_1[_i], prop = _a.prop, dir = _a.dir;
-            var propA = deep_getter_1.deepValueGetter(a, prop);
-            var propB = deep_getter_1.deepValueGetter(b, prop);
+            var propA = column_prop_getters_1.getterForProp(prop)(a, prop);
+            var propB = column_prop_getters_1.getterForProp(prop)(b, prop);
             var compareFn = cols[prop] || orderByComparator;
             var comparison = dir !== types_1.SortDirection.desc ?
                 compareFn(propA, propB) :

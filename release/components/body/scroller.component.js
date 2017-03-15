@@ -60,7 +60,8 @@ ScrollerComponent.decorators = [
                 template: "\n    <ng-content></ng-content>\n  ",
                 host: {
                     class: 'datatable-scroll'
-                }
+                },
+                changeDetection: core_1.ChangeDetectionStrategy.OnPush
             },] },
 ];
 /** @nocollapse */

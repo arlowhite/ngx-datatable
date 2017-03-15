@@ -839,7 +839,8 @@ DatatableComponent.decorators = [
                 styleUrls: ['./datatable.component.css'],
                 host: {
                     class: 'ngx-datatable'
-                }
+                },
+                changeDetection: core_1.ChangeDetectionStrategy.OnPush
             },] },
 ];
 /** @nocollapse */

@@ -16,7 +16,7 @@ import * as import7 from '../../../../build/components/header/header.component';
 import * as import8 from '../../../../build/directives/orderable.directive';
 import * as import9 from '@angular/platform-browser';
 const styles_DataTableHeaderComponent:any[] = ([] as any[]);
-export const RenderType_DataTableHeaderComponent:import0.RendererTypeV2 = import0.ɵcrt({
+export const RenderType_DataTableHeaderComponent:import0.RendererType2 = import0.ɵcrt({
   encapsulation: 2,
   styles: styles_DataTableHeaderComponent,
   data: {}
@@ -331,7 +331,7 @@ function View_DataTableHeaderComponent_1():import0.ɵViewDefinition {
   });
 }
 export function View_DataTableHeaderComponent_0():import0.ɵViewDefinition {
-  return import0.ɵvid(0,[
+  return import0.ɵvid(2,[
     import0.ɵted((null as any),['\n    ']),
     import0.ɵeld(0,(null as any),(null as any),6,'div',[
       [
@@ -403,7 +403,7 @@ export function View_DataTableHeaderComponent_0():import0.ɵViewDefinition {
     check(view,1,0,currVal_0);
   });
 }
-const RenderType_DataTableHeaderComponent_Host:import0.RendererTypeV2 = import0.ɵcrt({
+const RenderType_DataTableHeaderComponent_Host:import0.RendererType2 = import0.ɵcrt({
   encapsulation: 2,
   styles: ([] as any[]),
   data: {}

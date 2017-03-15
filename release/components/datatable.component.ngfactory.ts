@@ -17,7 +17,7 @@ import * as import8 from '@angular/common';
 import * as import9 from './body/body.component.ngfactory';
 import * as import10 from '../../../build/components/body/body.component';
 const styles_DatatableComponent:any[] = [import0.styles];
-export const RenderType_DatatableComponent:import1.RendererTypeV2 = import1.ɵcrt({
+export const RenderType_DatatableComponent:import1.RendererType2 = import1.ɵcrt({
   encapsulation: 2,
   styles: styles_DatatableComponent,
   data: {}
@@ -302,7 +302,7 @@ function View_DatatableComponent_2():import1.ɵViewDefinition {
   },(null as any));
 }
 export function View_DatatableComponent_0():import1.ɵViewDefinition {
-  return import1.ɵvid(0,[
+  return import1.ɵvid(2,[
     import1.ɵqud(201326592,1,{bodyComponent: 0}),
     import1.ɵted((null as any),['\n    ']),
       import1.ɵeld(0,(null as any),(null as any),12,'div',[[
@@ -601,7 +601,7 @@ export function View_DatatableComponent_0():import1.ɵViewDefinition {
     check(view,8,0,currVal_1,currVal_2);
   });
 }
-const RenderType_DatatableComponent_Host:import1.RendererTypeV2 = import1.ɵcrt({
+const RenderType_DatatableComponent_Host:import1.RendererType2 = import1.ɵcrt({
   encapsulation: 2,
   styles: ([] as any[]),
   data: {}
