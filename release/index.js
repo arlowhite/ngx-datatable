@@ -1263,6 +1263,16 @@ exports.isArray = Array.isArray || (function (x) { return x && typeof x.length =
 
 /***/ }),
 
+/***/ "./node_modules/rxjs/util/isArrayLike.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+exports.isArrayLike = (function (x) { return x && typeof x.length === 'number'; });
+//# sourceMappingURL=isArrayLike.js.map
+
+/***/ }),
+
 /***/ "./node_modules/rxjs/util/isFunction.js":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1329,7 +1339,7 @@ if (!exports.root) {
 "use strict";
 
 var root_1 = __webpack_require__("./node_modules/rxjs/util/root.js");
-var isArray_1 = __webpack_require__("./node_modules/rxjs/util/isArray.js");
+var isArrayLike_1 = __webpack_require__("./node_modules/rxjs/util/isArrayLike.js");
 var isPromise_1 = __webpack_require__("./node_modules/rxjs/util/isPromise.js");
 var isObject_1 = __webpack_require__("./node_modules/rxjs/util/isObject.js");
 var Observable_1 = __webpack_require__("./node_modules/rxjs/Observable.js");
@@ -1351,7 +1361,7 @@ function subscribeToResult(outerSubscriber, result, outerValue, outerIndex) {
             return result.subscribe(destination);
         }
     }
-    else if (isArray_1.isArray(result)) {
+    else if (isArrayLike_1.isArrayLike(result)) {
         for (var i = 0, len = result.length; i < len && !destination.closed; i++) {
             destination.next(result[i]);
         }
@@ -1512,6 +1522,20 @@ var DataTableBodyCellComponent = (function () {
         this.isFocused = false;
         this.element = element.nativeElement;
     }
+    Object.defineProperty(DataTableBodyCellComponent.prototype, "column", {
+        get: function () { return this._column; },
+        set: function (column) {
+            this._column = column;
+            if (column) {
+                this._valueGetter = utils_1.getterForProp(column.prop);
+            }
+            else {
+                this._valueGetter = utils_1.emptyStringGetter;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(DataTableBodyCellComponent.prototype, "sorts", {
         get: function () {
             return this._sorts;
@@ -1526,8 +1550,8 @@ var DataTableBodyCellComponent = (function () {
     Object.defineProperty(DataTableBodyCellComponent.prototype, "columnCssClasses", {
         get: function () {
             var cls = 'datatable-body-cell';
-            if (this.column.cssClasses)
-                cls += ' ' + this.column.cssClasses;
+            if (this._column.cssClasses)
+                cls += ' ' + this._column.cssClasses;
             return cls;
         },
         enumerable: true,
@@ -1556,7 +1580,7 @@ var DataTableBodyCellComponent = (function () {
     });
     Object.defineProperty(DataTableBodyCellComponent.prototype, "width", {
         get: function () {
-            return this.column.width;
+            return this._column.width;
         },
         enumerable: true,
         configurable: true
@@ -1573,10 +1597,10 @@ var DataTableBodyCellComponent = (function () {
     });
     Object.defineProperty(DataTableBodyCellComponent.prototype, "value", {
         get: function () {
-            if (!this.row || !this.column || !this.column.prop)
+            if (!this.row)
                 return '';
-            var val = utils_1.deepValueGetter(this.row, this.column.prop);
-            var userPipe = this.column.pipe;
+            var val = this._valueGetter(this.row, this._column.prop);
+            var userPipe = this._column.pipe;
             if (userPipe)
                 return userPipe.transform(val);
             if (val !== undefined)
@@ -1597,7 +1621,7 @@ var DataTableBodyCellComponent = (function () {
             type: 'click',
             event: event,
             row: this.row,
-            column: this.column,
+            column: this._column,
             value: this.value,
             cellElement: this.element
         });
@@ -1607,7 +1631,7 @@ var DataTableBodyCellComponent = (function () {
             type: 'dblclick',
             event: event,
             row: this.row,
-            column: this.column,
+            column: this._column,
             value: this.value,
             cellElement: this.element
         });
@@ -1627,7 +1651,7 @@ var DataTableBodyCellComponent = (function () {
                 type: 'keydown',
                 event: event,
                 row: this.row,
-                column: this.column,
+                column: this._column,
                 value: this.value,
                 cellElement: this.element
             });
@@ -1638,7 +1662,7 @@ var DataTableBodyCellComponent = (function () {
             type: 'checkbox',
             event: event,
             row: this.row,
-            column: this.column,
+            column: this._column,
             value: this.value,
             cellElement: this.element
         });
@@ -1648,7 +1672,7 @@ var DataTableBodyCellComponent = (function () {
         if (!sorts)
             return;
         var sort = sorts.find(function (s) {
-            return s.prop === _this.column.prop;
+            return s.prop === _this._column.prop;
         });
         if (sort)
             return sort.dir;
@@ -1659,8 +1683,9 @@ var DataTableBodyCellComponent = (function () {
     ], DataTableBodyCellComponent.prototype, "row", void 0);
     __decorate([
         core_1.Input(), 
-        __metadata('design:type', Object)
-    ], DataTableBodyCellComponent.prototype, "column", void 0);
+        __metadata('design:type', Object), 
+        __metadata('design:paramtypes', [Object])
+    ], DataTableBodyCellComponent.prototype, "column", null);
     __decorate([
         core_1.Input(), 
         __metadata('design:type', Number)
@@ -1742,7 +1767,8 @@ var DataTableBodyCellComponent = (function () {
             template: "\n    <div class=\"datatable-body-cell-label\">\n      <label\n        *ngIf=\"column.checkboxable\" \n        class=\"datatable-checkbox\">\n        <input \n          type=\"checkbox\"\n          [checked]=\"isSelected\"\n          (click)=\"onCheckboxChange($event)\" \n        />\n      </label>\n      <span\n        *ngIf=\"!column.cellTemplate\"\n        [innerHTML]=\"value\">\n      </span>\n      <template\n        *ngIf=\"column.cellTemplate\"\n        [ngTemplateOutlet]=\"column.cellTemplate\"\n        [ngOutletContext]=\"{ value: value, row: row, column: column }\">\n      </template>\n    </div>\n  ",
             host: {
                 class: 'datatable-body-cell'
-            }
+            },
+            changeDetection: core_1.ChangeDetectionStrategy.OnPush
         }), 
         __metadata('design:paramtypes', [core_1.ElementRef])
     ], DataTableBodyCellComponent);
@@ -1808,7 +1834,8 @@ var DataTableRowWrapperComponent = (function () {
             template: "\n    <ng-content></ng-content>\n    <div \n      *ngIf=\"expanded\"\n      [style.height.px]=\"detailRowHeight\" \n      class=\"datatable-row-detail\">\n      <template\n        *ngIf=\"rowDetail && rowDetail.template\"\n        [ngTemplateOutlet]=\"rowDetail.template\"\n        [ngOutletContext]=\"{ row: row }\">\n      </template>\n    </div>\n  ",
             host: {
                 class: 'datatable-row-wrapper'
-            }
+            },
+            changeDetection: core_1.ChangeDetectionStrategy.OnPush
         }), 
         __metadata('design:paramtypes', [])
     ], DataTableRowWrapperComponent);
@@ -1993,7 +2020,8 @@ var DataTableBodyRowComponent = (function () {
             template: "\n    <div\n      *ngFor=\"let colGroup of columnsByPin; let i = index; trackBy: trackByGroups\"\n      class=\"datatable-row-{{colGroup.type}} datatable-row-group\"\n      [ngStyle]=\"stylesByGroup(colGroup.type)\">\n      <datatable-body-cell\n        *ngFor=\"let column of colGroup.columns; let ii = index; trackBy: columnTrackingFn\"\n        tabindex=\"-1\"\n        [row]=\"row\"\n        [isSelected]=\"isSelected\"\n        [column]=\"column\"\n        [rowHeight]=\"rowHeight\"\n        (activate)=\"onActivate($event, ii)\">\n      </datatable-body-cell>\n    </div>\n  ",
             host: {
                 class: 'datatable-body-row'
-            }
+            },
+            changeDetection: core_1.ChangeDetectionStrategy.OnPush
         }), 
         __metadata('design:paramtypes', [core_1.ElementRef])
     ], DataTableBodyRowComponent);
@@ -2250,7 +2278,7 @@ var DataTableBodyComponent = (function () {
     DataTableBodyComponent.prototype.updatePage = function (direction) {
         var offset = this.indexes.first / this.pageSize;
         if (direction === 'up') {
-            offset = Math.floor(offset);
+            offset = Math.ceil(offset);
         }
         else if (direction === 'down') {
             offset = Math.ceil(offset);
@@ -2579,7 +2607,8 @@ var DataTableBodyComponent = (function () {
             template: "\n    <datatable-selection\n      #selector\n      [selected]=\"selected\"\n      [rows]=\"temp\"\n      [selectCheck]=\"selectCheck\"\n      [selectEnabled]=\"selectEnabled\"\n      [selectionType]=\"selectionType\"\n      [rowIdentity]=\"rowIdentity\"\n      (select)=\"select.emit($event)\"\n      (activate)=\"activate.emit($event)\">\n      <datatable-progress\n        *ngIf=\"loadingIndicator\">\n      </datatable-progress>\n      <datatable-scroller\n        *ngIf=\"rows?.length\"\n        [scrollbarV]=\"scrollbarV\"\n        [scrollbarH]=\"scrollbarH\"\n        [scrollHeight]=\"scrollHeight\"\n        [scrollWidth]=\"columnGroupWidths.total\"\n        (scroll)=\"onBodyScroll($event)\">\n        <datatable-row-wrapper\n          *ngFor=\"let row of temp; let i = index; trackBy: rowTrackingFn;\"\n          [ngStyle]=\"getRowsStyles(row)\"\n          [rowDetail]=\"rowDetail\"\n          [detailRowHeight]=\"detailRowHeight\"\n          [row]=\"row\"\n          [expanded]=\"row.$$expanded === 1\"\n          (rowContextmenu)=\"rowContextmenu.emit($event)\">\n          <datatable-body-row\n            tabindex=\"-1\"\n            [isSelected]=\"selector.getRowSelected(row)\"\n            [innerWidth]=\"innerWidth\"\n            [offsetX]=\"offsetX\"\n            [columns]=\"columns\"\n            [rowHeight]=\"rowHeight\"\n            [row]=\"row\"\n            (activate)=\"selector.onActivate($event, i)\">\n          </datatable-body-row>\n        </datatable-row-wrapper>\n      </datatable-scroller>\n      <div\n        class=\"empty-row\"\n        *ngIf=\"!rows?.length\"\n        [innerHTML]=\"emptyMessage\">\n      </div>\n    </datatable-selection>\n  ",
             host: {
                 class: 'datatable-body'
-            }
+            },
+            changeDetection: core_1.ChangeDetectionStrategy.OnPush
         }), 
         __metadata('design:paramtypes', [])
     ], DataTableBodyComponent);
@@ -2736,7 +2765,8 @@ var ScrollerComponent = (function () {
             template: "\n    <ng-content></ng-content>\n  ",
             host: {
                 class: 'datatable-scroll'
-            }
+            },
+            changeDetection: core_1.ChangeDetectionStrategy.OnPush
         }), 
         __metadata('design:paramtypes', [core_1.ElementRef, core_1.Renderer])
     ], ScrollerComponent);
@@ -3021,7 +3051,7 @@ var DataTableColumnDirective = (function () {
     ], DataTableColumnDirective.prototype, "name", void 0);
     __decorate([
         core_1.Input(), 
-        __metadata('design:type', String)
+        __metadata('design:type', Object)
     ], DataTableColumnDirective.prototype, "prop", void 0);
     __decorate([
         core_1.Input(), 
@@ -3277,8 +3307,8 @@ var DatatableComponent = (function () {
          * @memberOf DatatableComponent
          */
         this.cssClasses = {
-            sortAscending: 'icon-down',
-            sortDescending: 'icon-up',
+            sortAscending: 'icon-up',
+            sortDescending: 'icon-down',
             pagerLeftArrow: 'icon-left',
             pagerRightArrow: 'icon-right',
             pagerPrevious: 'icon-prev',
@@ -3717,7 +3747,7 @@ var DatatableComponent = (function () {
      * distribution mode and scrollbar offsets.
      *
      * @param {any[]} [columns=this.columns]
-     * @param {number} [forceIdx=false]
+     * @param {number} [forceIdx=-1]
      * @param {boolean} [allowBleed=this.scrollH]
      * @returns {any[]}
      *
@@ -3927,7 +3957,9 @@ var DatatableComponent = (function () {
             this._rows = utils_1.sortRows(this.rows, this.columns, sorts);
         }
         this.sorts = sorts;
-        this.bodyComponent.updateOffsetY(0);
+        // Always go to first page when sorting to see the newly sorted data
+        this.offset = 0;
+        this.bodyComponent.updateOffsetY(this.offset);
         this.sort.emit(event);
     };
     /**
@@ -4160,7 +4192,8 @@ var DatatableComponent = (function () {
             styles: [__webpack_require__("./src/components/datatable.component.scss")],
             host: {
                 class: 'ngx-datatable'
-            }
+            },
+            changeDetection: core_1.ChangeDetectionStrategy.OnPush
         }), 
         __metadata('design:paramtypes', [core_1.ElementRef, core_1.KeyValueDiffers])
     ], DatatableComponent);
@@ -4495,6 +4528,10 @@ var DataTableHeaderCellComponent = (function () {
     });
     Object.defineProperty(DataTableHeaderCellComponent.prototype, "name", {
         get: function () {
+            // TODO review this.column.name logic. just return this.column.name?
+            // column name is guaranteed by setColumnDefaults()
+            // so this.column.prop is probably never returned
+            // However, if name is not truthy, this.column.prop could be a number and return
             return this.column.name || this.column.prop;
         },
         enumerable: true,
@@ -4626,7 +4663,8 @@ var DataTableHeaderCellComponent = (function () {
     DataTableHeaderCellComponent = __decorate([
         core_1.Component({
             selector: 'datatable-header-cell',
-            template: "\n    <div>\n      <label\n        *ngIf=\"isCheckboxable\" \n        class=\"datatable-checkbox\">\n        <input \n          type=\"checkbox\"\n          [attr.checked]=\"allRowsSelected\"\n          (change)=\"select.emit(!allRowsSelected)\" \n        />\n      </label>\n      <span \n        *ngIf=\"!column.headerTemplate\"\n        class=\"datatable-header-cell-wrapper\">\n        <span\n          class=\"datatable-header-cell-label draggable\"\n          (click)=\"onSort()\"\n          [innerHTML]=\"name\">\n        </span>\n      </span>\n      <template\n        *ngIf=\"column.headerTemplate\"\n        [ngTemplateOutlet]=\"column.headerTemplate\"\n        [ngOutletContext]=\"{ \n          column: column, \n          sortDir: sortDir,\n          sortFn: sortFn\n        }\">\n      </template>\n      <span\n        (click)=\"onSort()\"\n        [class]=\"sortClass\">\n      </span>\n    </div>\n  "
+            template: "\n    <div>\n      <label\n        *ngIf=\"isCheckboxable\" \n        class=\"datatable-checkbox\">\n        <input \n          type=\"checkbox\"\n          [attr.checked]=\"allRowsSelected\"\n          (change)=\"select.emit(!allRowsSelected)\" \n        />\n      </label>\n      <span \n        *ngIf=\"!column.headerTemplate\"\n        class=\"datatable-header-cell-wrapper\">\n        <span\n          class=\"datatable-header-cell-label draggable\"\n          (click)=\"onSort()\"\n          [innerHTML]=\"name\">\n        </span>\n      </span>\n      <template\n        *ngIf=\"column.headerTemplate\"\n        [ngTemplateOutlet]=\"column.headerTemplate\"\n        [ngOutletContext]=\"{ \n          column: column, \n          sortDir: sortDir,\n          sortFn: sortFn\n        }\">\n      </template>\n      <span\n        (click)=\"onSort()\"\n        [class]=\"sortClass\">\n      </span>\n    </div>\n  ",
+            changeDetection: core_1.ChangeDetectionStrategy.OnPush
         }), 
         __metadata('design:paramtypes', [])
     ], DataTableHeaderCellComponent);
@@ -4851,7 +4889,8 @@ var DataTableHeaderComponent = (function () {
             template: "\n    <div\n      orderable\n      (reorder)=\"onColumnReordered($event)\"\n      [style.width.px]=\"columnGroupWidths.total\"\n      class=\"datatable-header-inner\">\n      <div\n        *ngFor=\"let colGroup of columnsByPin; trackBy: trackByGroups\"\n        [class]=\"'datatable-row-' + colGroup.type\"\n        [ngStyle]=\"stylesByGroup(colGroup.type)\">\n        <datatable-header-cell\n          *ngFor=\"let column of colGroup.columns; trackBy: columnTrackingFn\"\n          resizeable\n          [resizeEnabled]=\"column.resizeable\"\n          (resize)=\"onColumnResized($event, column)\"\n          long-press\n          (longPress)=\"drag = true\"\n          (longPressEnd)=\"drag = false\"\n          draggable\n          [dragX]=\"reorderable && column.draggable && drag\"\n          [dragY]=\"false\"\n          [dragModel]=\"column\"\n          [headerHeight]=\"headerHeight\"\n          [column]=\"column\"\n          [sortType]=\"sortType\"\n          [sorts]=\"sorts\"\n          [selectionType]=\"selectionType\"\n          [sortAscendingIcon]=\"sortAscendingIcon\"\n          [sortDescendingIcon]=\"sortDescendingIcon\"\n          (sort)=\"onSort($event)\"\n          (select)=\"select.emit($event)\">\n        </datatable-header-cell>\n      </div>\n    </div>\n  ",
             host: {
                 class: 'datatable-header'
-            }
+            },
+            changeDetection: core_1.ChangeDetectionStrategy.OnPush
         }), 
         __metadata('design:paramtypes', [])
     ], DataTableHeaderComponent);
@@ -5872,13 +5911,14 @@ function setColumnDefaults(columns) {
         if (!column.$$id) {
             column.$$id = id_1.id();
         }
+        // prop can be numeric; zero is valid not a missing prop
         // translate name => prop
-        if (!column.prop && column.name) {
+        if (column.prop == null && column.name) {
             column.prop = camel_case_1.camelCase(column.name);
         }
         // format props if no name passed
-        if (column.prop && !column.name) {
-            column.name = camel_case_1.deCamelCase(column.prop);
+        if (column.prop != null && !column.name) {
+            column.name = camel_case_1.deCamelCase(String(column.prop));
         }
         if (!column.hasOwnProperty('resizeable')) {
             column.resizeable = true;
@@ -5926,6 +5966,98 @@ function translateTemplates(templates) {
     return result;
 }
 exports.translateTemplates = translateTemplates;
+
+
+/***/ }),
+
+/***/ "./src/utils/column-prop-getters.ts":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+// maybe rename this file to prop-getters.ts
+
+/**
+ * Always returns the empty string ''
+ * @returns {string}
+ */
+function emptyStringGetter() {
+    return '';
+}
+exports.emptyStringGetter = emptyStringGetter;
+/**
+ * Returns the appropriate getter function for this kind of prop.
+ * If prop == null, returns the emptyStringGetter.
+ */
+function getterForProp(prop) {
+    if (prop == null)
+        return emptyStringGetter;
+    if (typeof prop === 'number') {
+        return numericIndexGetter;
+    }
+    else {
+        // deep or simple
+        if (prop.indexOf('.') !== -1) {
+            return deepValueGetter;
+        }
+        else {
+            return shallowValueGetter;
+        }
+    }
+}
+exports.getterForProp = getterForProp;
+/**
+ * Returns the value at this numeric index.
+ * @param row array of values
+ * @param index numeric index
+ * @returns {any} or '' if invalid index
+ */
+function numericIndexGetter(row, index) {
+    // mimic behavior of deepValueGetter
+    if (!row || index == null)
+        return row;
+    var value = row[index];
+    if (value == null)
+        return '';
+    return value;
+}
+exports.numericIndexGetter = numericIndexGetter;
+/**
+ * Returns the value of a field.
+ * (more efficient than deepValueGetter)
+ * @param obj object containing the field
+ * @param fieldName field name string
+ * @returns {any}
+ */
+function shallowValueGetter(obj, fieldName) {
+    if (!obj || !fieldName)
+        return obj;
+    var value = obj[fieldName];
+    if (value == null)
+        return '';
+    return value;
+}
+exports.shallowValueGetter = shallowValueGetter;
+/**
+ * Returns a deep object given a string. zoo['animal.type']
+ * @param {object} obj
+ * @param {string} path
+ */
+function deepValueGetter(obj, path) {
+    if (!obj || !path)
+        return obj;
+    var current = obj;
+    var split = path.split('.');
+    if (split.length) {
+        for (var i = 0; i < split.length; i++) {
+            current = current[split[i]];
+            // if found undefined, return empty string
+            if (current === undefined || current === null)
+                return '';
+        }
+    }
+    return current;
+}
+exports.deepValueGetter = deepValueGetter;
 
 
 /***/ }),
@@ -6022,36 +6154,6 @@ exports.columnsByPinArr = columnsByPinArr;
 
 /***/ }),
 
-/***/ "./src/utils/deep-getter.ts":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-/**
- * Returns a deep object given a string. zoo['animal.type']
- * @param {object} obj
- * @param {string} path
- */
-function deepValueGetter(obj, path) {
-    if (!obj || !path)
-        return obj;
-    var current = obj;
-    var split = path.split('.');
-    if (split.length) {
-        for (var i = 0; i < split.length; i++) {
-            current = current[split[i]];
-            // if found undefined, return empty string
-            if (current === undefined || current === null)
-                return '';
-        }
-    }
-    return current;
-}
-exports.deepValueGetter = deepValueGetter;
-
-
-/***/ }),
-
 /***/ "./src/utils/id.ts":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -6079,7 +6181,7 @@ function __export(m) {
 }
 __export(__webpack_require__("./src/utils/id.ts"));
 __export(__webpack_require__("./src/utils/column.ts"));
-__export(__webpack_require__("./src/utils/deep-getter.ts"));
+__export(__webpack_require__("./src/utils/column-prop-getters.ts"));
 __export(__webpack_require__("./src/utils/camel-case.ts"));
 __export(__webpack_require__("./src/utils/keys.ts"));
 __export(__webpack_require__("./src/utils/math.ts"));
@@ -6194,25 +6296,28 @@ function scaleColumns(colsByGroup, maxWidth, totalFlexGrow) {
 }
 /**
  * Forces the width of the columns to
- * distribute equally but overflowing when nesc.
+ * distribute equally but overflowing when necessary
  *
  * Rules:
  *
  *  - If combined withs are less than the total width of the grid,
- *    proporation the widths given the min / max / noraml widths to fill the width.
+ *    proportion the widths given the min / max / normal widths to fill the width.
  *
  *  - If the combined widths, exceed the total width of the grid,
  *    use the standard widths.
  *
  *  - If a column is resized, it should always use that width
  *
- *  - The proporational widths should never fall below min size if specified.
+ *  - The proportional widths should never fall below min size if specified.
  *
  *  - If the grid starts off small but then becomes greater than the size ( + / - )
- *    the width should use the orginial width; not the newly proporatied widths.
+ *    the width should use the original width; not the newly proportioned widths.
  *
  * @param {array} allColumns
  * @param {int} expectedWidth
+ * @param {int} startIdx
+ * @param {boolean} allowBleed
+ * @param {int} defaultColWidth
  */
 function forceFillColumnWidths(allColumns, expectedWidth, startIdx, allowBleed, defaultColWidth) {
     if (defaultColWidth === void 0) { defaultColWidth = 300; }
@@ -6569,7 +6674,7 @@ exports.selectRowsBetween = selectRowsBetween;
 "use strict";
 
 var types_1 = __webpack_require__("./src/types/index.ts");
-var deep_getter_1 = __webpack_require__("./src/utils/deep-getter.ts");
+var column_prop_getters_1 = __webpack_require__("./src/utils/column-prop-getters.ts");
 /**
  * Gets the next sort direction
  * @param  {SortType}      sortType
@@ -6654,8 +6759,8 @@ function sortRows(rows, columns, dirs) {
     return temp.sort(function (a, b) {
         for (var _i = 0, dirs_1 = dirs; _i < dirs_1.length; _i++) {
             var _a = dirs_1[_i], prop = _a.prop, dir = _a.dir;
-            var propA = deep_getter_1.deepValueGetter(a, prop);
-            var propB = deep_getter_1.deepValueGetter(b, prop);
+            var propA = column_prop_getters_1.getterForProp(prop)(a, prop);
+            var propB = column_prop_getters_1.getterForProp(prop)(b, prop);
             var compareFn = cols[prop] || orderByComparator;
             var comparison = dir !== types_1.SortDirection.desc ?
                 compareFn(propA, propB) :

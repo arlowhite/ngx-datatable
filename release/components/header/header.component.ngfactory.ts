@@ -217,7 +217,7 @@ class View_DataTableHeaderComponent_Host0 extends import2.AppView<any> {
     return notFoundResult;
   }
   detectChangesInternal(throwOnChange:boolean):void {
-    this._DataTableHeaderComponent_0_3.ngDoCheck(this,this._el_0,throwOnChange);
+    if (this._DataTableHeaderComponent_0_3.ngDoCheck(this,this._el_0,throwOnChange)) { this.compView_0.markAsCheckOnce(); }
     this._DataTableHeaderComponent_0_3.checkHost(this,this.compView_0,this._el_0,throwOnChange);
     this.compView_0.internalDetectChanges(throwOnChange);
   }
@@ -295,7 +295,7 @@ class View_DataTableHeaderComponent2 extends import2.AppView<any> {
     this._DataTableHeaderCellComponent_0_6.check_headerHeight(currVal_0_3_5,throwOnChange,false);
     const currVal_0_3_6:any = this.parentView.parentView.context.sorts;
     this._DataTableHeaderCellComponent_0_6.check_sorts(currVal_0_3_6,throwOnChange,false);
-    this._DataTableHeaderCellComponent_0_6.ngDoCheck(this,this._el_0,throwOnChange);
+    if (this._DataTableHeaderCellComponent_0_6.ngDoCheck(this,this._el_0,throwOnChange)) { this.compView_0.markAsCheckOnce(); }
     this._ResizeableDirective_0_4.checkHost(this,this.compView_0,this._el_0,throwOnChange);
     this._LongPressDirective_0_5.checkHost(this,this.compView_0,this._el_0,throwOnChange);
     this._DataTableHeaderCellComponent_0_6.checkHost(this,this.compView_0,this._el_0,throwOnChange);
@@ -424,7 +424,7 @@ export class View_DataTableHeaderComponent0 extends import2.AppView<import0.Data
   _text_5:any;
   /*private*/ _expr_11:any;
   constructor(viewUtils:import3.ViewUtils,parentView:import2.AppView<any>,parentIndex:number,parentElement:any) {
-    super(View_DataTableHeaderComponent0,renderType_DataTableHeaderComponent,import7.ViewType.COMPONENT,viewUtils,parentView,parentIndex,parentElement,import8.ChangeDetectorStatus.CheckAlways);
+    super(View_DataTableHeaderComponent0,renderType_DataTableHeaderComponent,import7.ViewType.COMPONENT,viewUtils,parentView,parentIndex,parentElement,import8.ChangeDetectorStatus.CheckOnce);
     this._expr_11 = import1.UNINITIALIZED;
   }
   createInternal(rootSelector:string):import9.ComponentRef<any> {

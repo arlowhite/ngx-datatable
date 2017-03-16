@@ -404,7 +404,7 @@ class View_DatatableComponent_Host0 extends import2.AppView<any> {
     return notFoundResult;
   }
   detectChangesInternal(throwOnChange:boolean):void {
-    this._DatatableComponent_0_3.ngDoCheck(this,this._el_0,throwOnChange);
+    if (this._DatatableComponent_0_3.ngDoCheck(this,this._el_0,throwOnChange)) { this.compView_0.markAsCheckOnce(); }
     if (!throwOnChange) { if (this._query_DataTableColumnDirective_0_0.dirty) {
       this._query_DataTableColumnDirective_0_0.reset(([] as any[]));
       this._DatatableComponent_0_3.context.columnTemplates = this._query_DataTableColumnDirective_0_0;
@@ -482,7 +482,7 @@ class View_DatatableComponent1 extends import2.AppView<any> {
     this._DataTableHeaderComponent_0_3.check_headerHeight(currVal_0_0_10,throwOnChange,false);
     const currVal_0_0_11:any = this.parentView.context.columns;
     this._DataTableHeaderComponent_0_3.check_columns(currVal_0_0_11,throwOnChange,false);
-    this._DataTableHeaderComponent_0_3.ngDoCheck(this,this._el_0,throwOnChange);
+    if (this._DataTableHeaderComponent_0_3.ngDoCheck(this,this._el_0,throwOnChange)) { this.compView_0.markAsCheckOnce(); }
     this._DataTableHeaderComponent_0_3.checkHost(this,this.compView_0,this._el_0,throwOnChange);
     this.compView_0.internalDetectChanges(throwOnChange);
   }
@@ -609,7 +609,7 @@ export class View_DatatableComponent0 extends import2.AppView<import0.DatatableC
   _text_9:any;
   _text_10:any;
   constructor(viewUtils:import3.ViewUtils,parentView:import2.AppView<any>,parentIndex:number,parentElement:any) {
-    super(View_DatatableComponent0,renderType_DatatableComponent,import7.ViewType.COMPONENT,viewUtils,parentView,parentIndex,parentElement,import8.ChangeDetectorStatus.CheckAlways);
+    super(View_DatatableComponent0,renderType_DatatableComponent,import7.ViewType.COMPONENT,viewUtils,parentView,parentIndex,parentElement,import8.ChangeDetectorStatus.CheckOnce);
   }
   createInternal(rootSelector:string):import9.ComponentRef<any> {
     const parentRenderNode:any = this.renderer.createViewRoot(this.parentElement);
@@ -713,7 +713,7 @@ export class View_DatatableComponent0 extends import2.AppView<import0.DatatableC
     this._DataTableBodyComponent_5_3.check_innerWidth(currVal_5_0_17,throwOnChange,false);
     const currVal_5_0_18:any = this.context.bodyHeight;
     this._DataTableBodyComponent_5_3.check_bodyHeight(currVal_5_0_18,throwOnChange,false);
-    this._DataTableBodyComponent_5_3.ngDoCheck(this,this._el_5,throwOnChange);
+    if (this._DataTableBodyComponent_5_3.ngDoCheck(this,this._el_5,throwOnChange)) { this.compView_5.markAsCheckOnce(); }
     const currVal_8_0_0:any = this.context.footerHeight;
     this._NgIf_8_6.check_ngIf(currVal_8_0_0,throwOnChange,false);
     this._NgIf_8_6.ngDoCheck(this,this._anchor_8,throwOnChange);

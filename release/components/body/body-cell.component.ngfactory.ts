@@ -188,7 +188,7 @@ class View_DataTableBodyCellComponent_Host0 extends import2.AppView<any> {
     return notFoundResult;
   }
   detectChangesInternal(throwOnChange:boolean):void {
-    this._DataTableBodyCellComponent_0_3.ngDoCheck(this,this._el_0,throwOnChange);
+    if (this._DataTableBodyCellComponent_0_3.ngDoCheck(this,this._el_0,throwOnChange)) { this.compView_0.markAsCheckOnce(); }
     this._DataTableBodyCellComponent_0_3.checkHost(this,this.compView_0,this._el_0,throwOnChange);
     this.compView_0.internalDetectChanges(throwOnChange);
   }
@@ -371,7 +371,7 @@ export class View_DataTableBodyCellComponent0 extends import2.AppView<import0.Da
   _text_8:any;
   _text_9:any;
   constructor(viewUtils:import3.ViewUtils,parentView:import2.AppView<any>,parentIndex:number,parentElement:any) {
-    super(View_DataTableBodyCellComponent0,renderType_DataTableBodyCellComponent,import7.ViewType.COMPONENT,viewUtils,parentView,parentIndex,parentElement,import8.ChangeDetectorStatus.CheckAlways);
+    super(View_DataTableBodyCellComponent0,renderType_DataTableBodyCellComponent,import7.ViewType.COMPONENT,viewUtils,parentView,parentIndex,parentElement,import8.ChangeDetectorStatus.CheckOnce);
   }
   createInternal(rootSelector:string):import9.ComponentRef<any> {
     const parentRenderNode:any = this.renderer.createViewRoot(this.parentElement);

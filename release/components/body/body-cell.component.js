@@ -8,6 +8,20 @@ var DataTableBodyCellComponent = (function () {
         this.isFocused = false;
         this.element = element.nativeElement;
     }
+    Object.defineProperty(DataTableBodyCellComponent.prototype, "column", {
+        get: function () { return this._column; },
+        set: function (column) {
+            this._column = column;
+            if (column) {
+                this._valueGetter = utils_1.getterForProp(column.prop);
+            }
+            else {
+                this._valueGetter = utils_1.emptyStringGetter;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(DataTableBodyCellComponent.prototype, "sorts", {
         get: function () {
             return this._sorts;
@@ -22,8 +36,8 @@ var DataTableBodyCellComponent = (function () {
     Object.defineProperty(DataTableBodyCellComponent.prototype, "columnCssClasses", {
         get: function () {
             var cls = 'datatable-body-cell';
-            if (this.column.cssClasses)
-                cls += ' ' + this.column.cssClasses;
+            if (this._column.cssClasses)
+                cls += ' ' + this._column.cssClasses;
             return cls;
         },
         enumerable: true,
@@ -52,7 +66,7 @@ var DataTableBodyCellComponent = (function () {
     });
     Object.defineProperty(DataTableBodyCellComponent.prototype, "width", {
         get: function () {
-            return this.column.width;
+            return this._column.width;
         },
         enumerable: true,
         configurable: true
@@ -69,10 +83,10 @@ var DataTableBodyCellComponent = (function () {
     });
     Object.defineProperty(DataTableBodyCellComponent.prototype, "value", {
         get: function () {
-            if (!this.row || !this.column || !this.column.prop)
+            if (!this.row)
                 return '';
-            var val = utils_1.deepValueGetter(this.row, this.column.prop);
-            var userPipe = this.column.pipe;
+            var val = this._valueGetter(this.row, this._column.prop);
+            var userPipe = this._column.pipe;
             if (userPipe)
                 return userPipe.transform(val);
             if (val !== undefined)
@@ -93,7 +107,7 @@ var DataTableBodyCellComponent = (function () {
             type: 'click',
             event: event,
             row: this.row,
-            column: this.column,
+            column: this._column,
             value: this.value,
             cellElement: this.element
         });
@@ -103,7 +117,7 @@ var DataTableBodyCellComponent = (function () {
             type: 'dblclick',
             event: event,
             row: this.row,
-            column: this.column,
+            column: this._column,
             value: this.value,
             cellElement: this.element
         });
@@ -123,7 +137,7 @@ var DataTableBodyCellComponent = (function () {
                 type: 'keydown',
                 event: event,
                 row: this.row,
-                column: this.column,
+                column: this._column,
                 value: this.value,
                 cellElement: this.element
             });
@@ -134,7 +148,7 @@ var DataTableBodyCellComponent = (function () {
             type: 'checkbox',
             event: event,
             row: this.row,
-            column: this.column,
+            column: this._column,
             value: this.value,
             cellElement: this.element
         });
@@ -144,7 +158,7 @@ var DataTableBodyCellComponent = (function () {
         if (!sorts)
             return;
         var sort = sorts.find(function (s) {
-            return s.prop === _this.column.prop;
+            return s.prop === _this._column.prop;
         });
         if (sort)
             return sort.dir;
@@ -155,7 +169,8 @@ var DataTableBodyCellComponent = (function () {
                     template: "\n    <div class=\"datatable-body-cell-label\">\n      <label\n        *ngIf=\"column.checkboxable\" \n        class=\"datatable-checkbox\">\n        <input \n          type=\"checkbox\"\n          [checked]=\"isSelected\"\n          (click)=\"onCheckboxChange($event)\" \n        />\n      </label>\n      <span\n        *ngIf=\"!column.cellTemplate\"\n        [innerHTML]=\"value\">\n      </span>\n      <template\n        *ngIf=\"column.cellTemplate\"\n        [ngTemplateOutlet]=\"column.cellTemplate\"\n        [ngOutletContext]=\"{ value: value, row: row, column: column }\">\n      </template>\n    </div>\n  ",
                     host: {
                         class: 'datatable-body-cell'
-                    }
+                    },
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush
                 },] },
     ];
     /** @nocollapse */

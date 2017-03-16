@@ -113,7 +113,7 @@ class View_DataTableRowWrapperComponent_Host0 extends import2.AppView<any> {
     return notFoundResult;
   }
   detectChangesInternal(throwOnChange:boolean):void {
-    this._DataTableRowWrapperComponent_0_3.ngDoCheck(this,this._el_0,throwOnChange);
+    if (this._DataTableRowWrapperComponent_0_3.ngDoCheck(this,this._el_0,throwOnChange)) { this.compView_0.markAsCheckOnce(); }
     this.compView_0.internalDetectChanges(throwOnChange);
   }
   destroyInternal():void {
@@ -264,7 +264,7 @@ export class View_DataTableRowWrapperComponent0 extends import2.AppView<import0.
   _NgIf_2_6:import13.Wrapper_NgIf;
   _text_3:any;
   constructor(viewUtils:import3.ViewUtils,parentView:import2.AppView<any>,parentIndex:number,parentElement:any) {
-    super(View_DataTableRowWrapperComponent0,renderType_DataTableRowWrapperComponent,import6.ViewType.COMPONENT,viewUtils,parentView,parentIndex,parentElement,import7.ChangeDetectorStatus.CheckAlways);
+    super(View_DataTableRowWrapperComponent0,renderType_DataTableRowWrapperComponent,import6.ViewType.COMPONENT,viewUtils,parentView,parentIndex,parentElement,import7.ChangeDetectorStatus.CheckOnce);
   }
   createInternal(rootSelector:string):import8.ComponentRef<any> {
     const parentRenderNode:any = this.renderer.createViewRoot(this.parentElement);

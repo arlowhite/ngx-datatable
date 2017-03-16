@@ -290,7 +290,7 @@ class View_DataTableBodyComponent_Host0 extends import2.AppView<any> {
     return notFoundResult;
   }
   detectChangesInternal(throwOnChange:boolean):void {
-    this._DataTableBodyComponent_0_3.ngDoCheck(this,this._el_0,throwOnChange);
+    if (this._DataTableBodyComponent_0_3.ngDoCheck(this,this._el_0,throwOnChange)) { this.compView_0.markAsCheckOnce(); }
     this._DataTableBodyComponent_0_3.checkHost(this,this.compView_0,this._el_0,throwOnChange);
     this.compView_0.internalDetectChanges(throwOnChange);
   }
@@ -403,7 +403,7 @@ class View_DataTableBodyComponent3 extends import2.AppView<any> {
     this._DataTableRowWrapperComponent_0_4.check_expanded(currVal_0_1_2,throwOnChange,false);
     const currVal_0_1_3:any = this.context.$implicit;
     this._DataTableRowWrapperComponent_0_4.check_row(currVal_0_1_3,throwOnChange,false);
-    this._DataTableRowWrapperComponent_0_4.ngDoCheck(this,this._el_0,throwOnChange);
+    if (this._DataTableRowWrapperComponent_0_4.ngDoCheck(this,this._el_0,throwOnChange)) { this.compView_0.markAsCheckOnce(); }
     const currVal_2_0_0:any = this.parentView.parentView.context.columns;
     this._DataTableBodyRowComponent_2_3.check_columns(currVal_2_0_0,throwOnChange,false);
     const currVal_2_0_1:any = this.parentView.parentView.context.innerWidth;
@@ -416,7 +416,7 @@ class View_DataTableBodyComponent3 extends import2.AppView<any> {
     this._DataTableBodyRowComponent_2_3.check_rowHeight(currVal_2_0_4,throwOnChange,false);
     const currVal_2_0_5:any = (<View_DataTableBodyComponent0>this.parentView.parentView)._DataTableSelectionComponent_1_3.context.getRowSelected(this.context.$implicit);
     this._DataTableBodyRowComponent_2_3.check_isSelected(currVal_2_0_5,throwOnChange,false);
-    this._DataTableBodyRowComponent_2_3.ngDoCheck(this,this._el_2,throwOnChange);
+    if (this._DataTableBodyRowComponent_2_3.ngDoCheck(this,this._el_2,throwOnChange)) { this.compView_2.markAsCheckOnce(); }
     this._DataTableBodyRowComponent_2_3.checkHost(this,this.compView_2,this._el_2,throwOnChange);
     this.compView_0.internalDetectChanges(throwOnChange);
     this.compView_2.internalDetectChanges(throwOnChange);
@@ -508,7 +508,7 @@ class View_DataTableBodyComponent2 extends import2.AppView<any> {
     this._ScrollerComponent_0_3.check_scrollHeight(currVal_0_0_2,throwOnChange,false);
     const currVal_0_0_3:any = this.parentView.context.columnGroupWidths.total;
     this._ScrollerComponent_0_3.check_scrollWidth(currVal_0_0_3,throwOnChange,false);
-    this._ScrollerComponent_0_3.ngDoCheck(this,this._el_0,throwOnChange);
+    if (this._ScrollerComponent_0_3.ngDoCheck(this,this._el_0,throwOnChange)) { this.compView_0.markAsCheckOnce(); }
     const currVal_2_0_0:any = this.parentView.context.temp;
     this._NgFor_2_6.check_ngForOf(currVal_2_0_0,throwOnChange,false);
     const currVal_2_0_1:any = this.parentView.context.rowTrackingFn;
@@ -605,7 +605,7 @@ export class View_DataTableBodyComponent0 extends import2.AppView<import0.DataTa
   _text_8:any;
   _text_9:any;
   constructor(viewUtils:import3.ViewUtils,parentView:import2.AppView<any>,parentIndex:number,parentElement:any) {
-    super(View_DataTableBodyComponent0,renderType_DataTableBodyComponent,import7.ViewType.COMPONENT,viewUtils,parentView,parentIndex,parentElement,import8.ChangeDetectorStatus.CheckAlways);
+    super(View_DataTableBodyComponent0,renderType_DataTableBodyComponent,import7.ViewType.COMPONENT,viewUtils,parentView,parentIndex,parentElement,import8.ChangeDetectorStatus.CheckOnce);
   }
   createInternal(rootSelector:string):import9.ComponentRef<any> {
     const parentRenderNode:any = this.renderer.createViewRoot(this.parentElement);

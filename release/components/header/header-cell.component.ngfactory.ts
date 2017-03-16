@@ -189,7 +189,7 @@ class View_DataTableHeaderCellComponent_Host0 extends import2.AppView<any> {
     return notFoundResult;
   }
   detectChangesInternal(throwOnChange:boolean):void {
-    this._DataTableHeaderCellComponent_0_3.ngDoCheck(this,this._el_0,throwOnChange);
+    if (this._DataTableHeaderCellComponent_0_3.ngDoCheck(this,this._el_0,throwOnChange)) { this.compView_0.markAsCheckOnce(); }
     this._DataTableHeaderCellComponent_0_3.checkHost(this,this.compView_0,this._el_0,throwOnChange);
     this.compView_0.internalDetectChanges(throwOnChange);
   }
@@ -389,7 +389,7 @@ export class View_DataTableHeaderCellComponent0 extends import2.AppView<import0.
   _text_12:any;
   /*private*/ _expr_22:any;
   constructor(viewUtils:import3.ViewUtils,parentView:import2.AppView<any>,parentIndex:number,parentElement:any) {
-    super(View_DataTableHeaderCellComponent0,renderType_DataTableHeaderCellComponent,import7.ViewType.COMPONENT,viewUtils,parentView,parentIndex,parentElement,import8.ChangeDetectorStatus.CheckAlways);
+    super(View_DataTableHeaderCellComponent0,renderType_DataTableHeaderCellComponent,import7.ViewType.COMPONENT,viewUtils,parentView,parentIndex,parentElement,import8.ChangeDetectorStatus.CheckOnce);
     this._expr_22 = import1.UNINITIALIZED;
   }
   createInternal(rootSelector:string):import9.ComponentRef<any> {

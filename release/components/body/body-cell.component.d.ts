@@ -2,6 +2,8 @@ import { EventEmitter, ElementRef } from '@angular/core';
 import { SortDirection } from '../../types';
 export declare class DataTableBodyCellComponent {
     row: any;
+    private _column;
+    private _valueGetter;
     column: any;
     rowHeight: number;
     isSelected: boolean;

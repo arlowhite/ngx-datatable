@@ -141,8 +141,8 @@ var DatatableComponent = (function () {
          * @memberOf DatatableComponent
          */
         this.cssClasses = {
-            sortAscending: 'icon-down',
-            sortDescending: 'icon-up',
+            sortAscending: 'icon-up',
+            sortDescending: 'icon-down',
             pagerLeftArrow: 'icon-left',
             pagerRightArrow: 'icon-right',
             pagerPrevious: 'icon-prev',
@@ -581,7 +581,7 @@ var DatatableComponent = (function () {
      * distribution mode and scrollbar offsets.
      *
      * @param {any[]} [columns=this.columns]
-     * @param {number} [forceIdx=false]
+     * @param {number} [forceIdx=-1]
      * @param {boolean} [allowBleed=this.scrollH]
      * @returns {any[]}
      *
@@ -791,7 +791,9 @@ var DatatableComponent = (function () {
             this._rows = utils_1.sortRows(this.rows, this.columns, sorts);
         }
         this.sorts = sorts;
-        this.bodyComponent.updateOffsetY(0);
+        // Always go to first page when sorting to see the newly sorted data
+        this.offset = 0;
+        this.bodyComponent.updateOffsetY(this.offset);
         this.sort.emit(event);
     };
     /**
@@ -833,7 +835,8 @@ var DatatableComponent = (function () {
                     styleUrls: ['./datatable.component.css'],
                     host: {
                         class: 'ngx-datatable'
-                    }
+                    },
+                    changeDetection: core_1.ChangeDetectionStrategy.OnPush
                 },] },
     ];
     /** @nocollapse */

@@ -1,5 +1,5 @@
-import { ElementRef, EventEmitter, OnInit, QueryList, AfterViewInit, IterableDiffer, DoCheck, KeyValueDiffers } from '@angular/core';
-import { ColumnMode, SortType, SelectionType } from '../types';
+import { ElementRef, EventEmitter, OnInit, QueryList, AfterViewInit, DoCheck, KeyValueDiffers, KeyValueDiffer } from '@angular/core';
+import { ColumnMode, SortType, SelectionType, TableColumn } from '../types';
 import { DataTableBodyComponent } from './body';
 import { DataTableColumnDirective } from './columns';
 import { DatatableRowDetailDirective } from './row-detail';
@@ -29,7 +29,7 @@ export declare class DatatableComponent implements OnInit, AfterViewInit, DoChec
      *
      * @memberOf DatatableComponent
      */
-    columns: any[];
+    columns: TableColumn[];
     /**
      * List of row objects that should be
      * represented as selected in the grid.
@@ -411,10 +411,10 @@ export declare class DatatableComponent implements OnInit, AfterViewInit, DoChec
     bodyHeight: number;
     rowCount: number;
     offsetX: number;
-    rowDiffer: IterableDiffer;
+    rowDiffer: KeyValueDiffer;
     _count: number;
     _rows: any[];
-    _columns: any[];
+    _columns: TableColumn[];
     _columnTemplates: QueryList<DataTableColumnDirective>;
     constructor(element: ElementRef, differs: KeyValueDiffers);
     /**
@@ -462,7 +462,7 @@ export declare class DatatableComponent implements OnInit, AfterViewInit, DoChec
      * distribution mode and scrollbar offsets.
      *
      * @param {any[]} [columns=this.columns]
-     * @param {number} [forceIdx=false]
+     * @param {number} [forceIdx=-1]
      * @param {boolean} [allowBleed=this.scrollH]
      * @returns {any[]}
      *

@@ -119,7 +119,7 @@ class View_ScrollerComponent_Host0 extends import2.AppView<any> {
     return notFoundResult;
   }
   detectChangesInternal(throwOnChange:boolean):void {
-    this._ScrollerComponent_0_3.ngDoCheck(this,this._el_0,throwOnChange);
+    if (this._ScrollerComponent_0_3.ngDoCheck(this,this._el_0,throwOnChange)) { this.compView_0.markAsCheckOnce(); }
     this._ScrollerComponent_0_3.checkHost(this,this.compView_0,this._el_0,throwOnChange);
     this.compView_0.internalDetectChanges(throwOnChange);
   }
@@ -141,7 +141,7 @@ export class View_ScrollerComponent0 extends import2.AppView<import0.ScrollerCom
   _text_0:any;
   _text_1:any;
   constructor(viewUtils:import3.ViewUtils,parentView:import2.AppView<any>,parentIndex:number,parentElement:any) {
-    super(View_ScrollerComponent0,renderType_ScrollerComponent,import7.ViewType.COMPONENT,viewUtils,parentView,parentIndex,parentElement,import8.ChangeDetectorStatus.CheckAlways);
+    super(View_ScrollerComponent0,renderType_ScrollerComponent,import7.ViewType.COMPONENT,viewUtils,parentView,parentIndex,parentElement,import8.ChangeDetectorStatus.CheckOnce);
   }
   createInternal(rootSelector:string):import9.ComponentRef<any> {
     const parentRenderNode:any = this.renderer.createViewRoot(this.parentElement);
