@@ -3633,9 +3633,9 @@ var DataTableBodyCellComponent = (function () {
     });
     Object.defineProperty(DataTableBodyCellComponent.prototype, "value", {
         get: function () {
-            if (!this.row || !this.column || !this.column.prop)
+            if (!this.row || !this.column)
                 return '';
-            var val = utils_1.deepValueGetter(this.row, this.column.prop);
+            var val = this.column.$$valueGetter(this.row, this.column.prop);
             var userPipe = this.column.pipe;
             if (userPipe)
                 return userPipe.transform(val);
@@ -5119,7 +5119,7 @@ __decorate([
 ], DataTableColumnDirective.prototype, "name", void 0);
 __decorate([
     core_1.Input(),
-    __metadata("design:type", String)
+    __metadata("design:type", Object)
 ], DataTableColumnDirective.prototype, "prop", void 0);
 __decorate([
     core_1.Input(),
@@ -6611,7 +6611,8 @@ var DataTableHeaderCellComponent = (function () {
     });
     Object.defineProperty(DataTableHeaderCellComponent.prototype, "name", {
         get: function () {
-            return this.column.name || this.column.prop;
+            // guaranteed to have a value by setColumnDefaults() in column-helper.ts
+            return this.column.name;
         },
         enumerable: true,
         configurable: true
@@ -8045,6 +8046,7 @@ exports.deCamelCase = deCamelCase;
 Object.defineProperty(exports, "__esModule", { value: true });
 var camel_case_1 = __webpack_require__("./src/utils/camel-case.ts");
 var id_1 = __webpack_require__("./src/utils/id.ts");
+var column_prop_getters_1 = __webpack_require__("./src/utils/column-prop-getters.ts");
 /**
  * Sets the column defaults
  *
@@ -8060,13 +8062,17 @@ function setColumnDefaults(columns) {
         if (!column.$$id) {
             column.$$id = id_1.id();
         }
+        // prop can be numeric; zero is valid not a missing prop
         // translate name => prop
-        if (!column.prop && column.name) {
+        if (column.prop == null && column.name) {
             column.prop = camel_case_1.camelCase(column.name);
         }
+        if (!column.$$valueGetter) {
+            column.$$valueGetter = column_prop_getters_1.getterForProp(column.prop);
+        }
         // format props if no name passed
-        if (column.prop && !column.name) {
-            column.name = camel_case_1.deCamelCase(column.prop);
+        if (column.prop != null && !column.name) {
+            column.name = camel_case_1.deCamelCase(String(column.prop));
         }
         if (!column.hasOwnProperty('resizeable')) {
             column.resizeable = true;
@@ -8114,6 +8120,99 @@ function translateTemplates(templates) {
     return result;
 }
 exports.translateTemplates = translateTemplates;
+
+
+/***/ }),
+
+/***/ "./src/utils/column-prop-getters.ts":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+// maybe rename this file to prop-getters.ts
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Always returns the empty string ''
+ * @returns {string}
+ */
+function emptyStringGetter() {
+    return '';
+}
+exports.emptyStringGetter = emptyStringGetter;
+/**
+ * Returns the appropriate getter function for this kind of prop.
+ * If prop == null, returns the emptyStringGetter.
+ */
+function getterForProp(prop) {
+    if (prop == null)
+        return emptyStringGetter;
+    if (typeof prop === 'number') {
+        return numericIndexGetter;
+    }
+    else {
+        // deep or simple
+        if (prop.indexOf('.') !== -1) {
+            return deepValueGetter;
+        }
+        else {
+            return shallowValueGetter;
+        }
+    }
+}
+exports.getterForProp = getterForProp;
+/**
+ * Returns the value at this numeric index.
+ * @param row array of values
+ * @param index numeric index
+ * @returns {any} or '' if invalid index
+ */
+function numericIndexGetter(row, index) {
+    // mimic behavior of deepValueGetter
+    if (!row || index == null)
+        return row;
+    var value = row[index];
+    if (value == null)
+        return '';
+    return value;
+}
+exports.numericIndexGetter = numericIndexGetter;
+/**
+ * Returns the value of a field.
+ * (more efficient than deepValueGetter)
+ * @param obj object containing the field
+ * @param fieldName field name string
+ * @returns {any}
+ */
+function shallowValueGetter(obj, fieldName) {
+    if (!obj || !fieldName)
+        return obj;
+    var value = obj[fieldName];
+    if (value == null)
+        return '';
+    return value;
+}
+exports.shallowValueGetter = shallowValueGetter;
+/**
+ * Returns a deep object given a string. zoo['animal.type']
+ * @param {object} obj
+ * @param {string} path
+ */
+function deepValueGetter(obj, path) {
+    if (!obj || !path)
+        return obj;
+    var current = obj;
+    var split = path.split('.');
+    if (split.length) {
+        for (var i = 0; i < split.length; i++) {
+            current = current[split[i]];
+            // if found undefined, return empty string
+            if (current === undefined || current === null)
+                return '';
+        }
+    }
+    return current;
+}
+exports.deepValueGetter = deepValueGetter;
 
 
 /***/ }),
@@ -8211,37 +8310,6 @@ exports.columnsByPinArr = columnsByPinArr;
 
 /***/ }),
 
-/***/ "./src/utils/deep-getter.ts":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * Returns a deep object given a string. zoo['animal.type']
- * @param {object} obj
- * @param {string} path
- */
-function deepValueGetter(obj, path) {
-    if (!obj || !path)
-        return obj;
-    var current = obj;
-    var split = path.split('.');
-    if (split.length) {
-        for (var i = 0; i < split.length; i++) {
-            current = current[split[i]];
-            // if found undefined, return empty string
-            if (current === undefined || current === null)
-                return '';
-        }
-    }
-    return current;
-}
-exports.deepValueGetter = deepValueGetter;
-
-
-/***/ }),
-
 /***/ "./src/utils/id.ts":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -8271,7 +8339,7 @@ function __export(m) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(__webpack_require__("./src/utils/id.ts"));
 __export(__webpack_require__("./src/utils/column.ts"));
-__export(__webpack_require__("./src/utils/deep-getter.ts"));
+__export(__webpack_require__("./src/utils/column-prop-getters.ts"));
 __export(__webpack_require__("./src/utils/camel-case.ts"));
 __export(__webpack_require__("./src/utils/keys.ts"));
 __export(__webpack_require__("./src/utils/math.ts"));
@@ -8771,7 +8839,7 @@ exports.selectRowsBetween = selectRowsBetween;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var types_1 = __webpack_require__("./src/types/index.ts");
-var deep_getter_1 = __webpack_require__("./src/utils/deep-getter.ts");
+var column_prop_getters_1 = __webpack_require__("./src/utils/column-prop-getters.ts");
 /**
  * Gets the next sort direction
  * @param  {SortType}      sortType
@@ -8853,15 +8921,26 @@ function sortRows(rows, columns, dirs) {
         }
         return obj;
     }, {});
+    // cache valueGetter and compareFn so that they
+    // do not need to be looked-up in the sort function body
+    var cachedDirs = dirs.map(function (dir) {
+        var prop = dir.prop;
+        return {
+            prop: prop,
+            dir: dir.dir,
+            valueGetter: column_prop_getters_1.getterForProp(prop),
+            compareFn: cols[prop] || orderByComparator
+        };
+    });
     return temp.sort(function (a, b) {
-        for (var _i = 0, dirs_1 = dirs; _i < dirs_1.length; _i++) {
-            var _a = dirs_1[_i], prop = _a.prop, dir = _a.dir;
-            var propA = deep_getter_1.deepValueGetter(a, prop);
-            var propB = deep_getter_1.deepValueGetter(b, prop);
-            var compareFn = cols[prop] || orderByComparator;
-            var comparison = dir !== types_1.SortDirection.desc ?
-                compareFn(propA, propB) :
-                -compareFn(propA, propB);
+        for (var _i = 0, cachedDirs_1 = cachedDirs; _i < cachedDirs_1.length; _i++) {
+            var cachedDir = cachedDirs_1[_i];
+            var prop = cachedDir.prop, valueGetter = cachedDir.valueGetter;
+            var propA = valueGetter(a, prop);
+            var propB = valueGetter(b, prop);
+            var comparison = cachedDir.dir !== types_1.SortDirection.desc ?
+                cachedDir.compareFn(propA, propB) :
+                -cachedDir.compareFn(propA, propB);
             // Don't return 0 yet in case of needing to sort by next property
             if (comparison !== 0)
                 return comparison;
