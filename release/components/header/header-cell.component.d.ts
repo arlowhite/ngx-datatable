@@ -1,6 +1,6 @@
-import { EventEmitter } from '@angular/core';
+import { EventEmitter, OnChanges, SimpleChanges, OnInit } from '@angular/core';
 import { SortDirection, SortType, SelectionType, TableColumn } from '../../types';
-export declare class DataTableHeaderCellComponent {
+export declare class DataTableHeaderCellComponent implements OnInit, OnChanges {
     sortType: SortType;
     column: TableColumn;
     sortAscendingIcon: string;
@@ -26,8 +26,13 @@ export declare class DataTableHeaderCellComponent {
     sortDir: SortDirection;
     _sorts: any[];
     selectFn: any;
+    private headerTemplateContext;
+    private initialized;
     onContextmenu($event: MouseEvent): void;
+    ngOnInit(): void;
+    ngOnChanges(changes: SimpleChanges): void;
     calcSortDir(sorts: any[]): any;
     onSort(): void;
     calcSortClass(sortDir: SortDirection): string;
+    private updateHeaderTemplateContext();
 }
